@@ -1,0 +1,65 @@
+rules_version = '2';
+
+// DEEPostrophy — Firestore Security Rules
+// এই ফাইলটি Firebase Console → Firestore Database → Rules ট্যাবে বসান, তারপর Publish করুন।
+// মালিক: arafathhossainrifath230119@gmail.com (ইমেইল অবশ্যই verified হতে হবে)।
+// নোট: shared.js এর OWNER_EMAIL এবং এই isOwner() — দুজায়গায় ইমেইল হুবহু একই থাকতে হবে।
+
+function isOwner() {
+  return request.auth != null
+    && request.auth.token.email == 'arafathhossainrifath230119@gmail.com'
+    && request.auth.token.email_verified == true;
+}
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---- স্টোর: যে কেউ শুধু published==true পড়বে; মালিক সব পড়তে/লিখতে পারবে ----
+    match /stores/{storeId} {
+      allow read: if isOwner() || resource.data.published == true;
+      allow write: if isOwner();
+    }
+
+    // ---- আইটেম: যে কেউ শুধু published==true পড়বে; মালিক সব পড়তে/লিখতে পারবে ----
+    match /items/{itemId} {
+      allow read: if isOwner() || resource.data.published == true;
+      allow write: if isOwner();
+    }
+
+    // ---- FAQ: সবাই পড়তে পারবে; লেখা শুধু মালিক ----
+    match /faq/{faqId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // ---- Settings: সবাই পড়তে পারবে; লেখা শুধু মালিক ----
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // ---- Messages (যোগাযোগ ফর্ম) ----
+    // create অনুমোদিত শুধু যদি ডেটায় ঠিক এই চারটি ফিল্ড থাকে: name, email, body, ts
+    //   name  : string, <= 100 অক্ষর
+    //   email : string, <= 100 অক্ষর, একটি @ থাকতে হবে
+    //   body  : string, <= 2000 অক্ষর
+    //   ts    : timestamp
+    // বাকি সব (read/update/delete) শুধু মালিক।
+    match /messages/{msgId} {
+      allow create: if
+        request.resource.data.keys().hasAll(['name', 'email', 'body', 'ts'])
+        && request.resource.data.keys().hasOnly(['name', 'email', 'body', 'ts'])
+        && request.resource.data.name  is string && request.resource.data.name.size()  <= 100
+        && request.resource.data.email is string && request.resource.data.email.size() <= 100
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && request.resource.data.body  is string && request.resource.data.body.size()  <= 2000
+        && request.resource.data.ts is timestamp;
+      allow read, update, delete: if isOwner();
+    }
+
+    // ---- বাকি সব কিছু বন্ধ ----
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

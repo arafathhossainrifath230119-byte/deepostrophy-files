@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<!--
+  DEEPostrophy — মালিকের কন্ট্রোল প্যানেল (অ্যাডমিন)।
+  পাবলিক মেনুতে এই ফাইলের কোনো লিংক নেই — মালিক সরাসরি খুলবেন: admin.html
+  shared.js-এর কনফিগ/ডেটা লেয়ার/অনুবাদ/কার্সার/সাউন্ড ব্যবহার করে; একই Firebase প্রজেক্ট, একই ডেটা, একই ডিজাইন।
+  প্যানেলে মোজাইক বা বাড়তি অ্যানিমেশন নেই; সব লেখা ভাষা টগল মেনে চলে।
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DEEPostrophy</title>
+<meta name="description" content="ARAFATH-এর ব্যক্তিগত পোর্টফোলিও ও অ্যাপ স্টোর — Flutter, Python, React/TypeScript ও Electron।" />
+<meta name="theme-color" content="#07070c" />
+<meta property="og:title" content="DEEPostrophy" />
+<meta property="og:description" content="ARAFATH-এর ব্যক্তিগত পোর্টফোলিও ও অ্যাপ স্টোর।" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%238b5cf6'/%3E%3Cstop%20offset='1'%20stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='100'%20height='100'%20rx='22'%20fill='%2307070c'/%3E%3Crect%20x='14'%20y='14'%20width='72'%20height='72'%20rx='16'%20fill='url(%23g)'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script>window.DEEO_ADMIN = true;</script>
+<script src="shared.js"></script>
+</head>
+<body>
+
+
+<div class="boot" id="boot"><div class="ring"></div></div>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <div class="brand" data-goto="home"><span class="dot"></span><span class="name en" id="brand-name" data-i18n-keep>DEEPostrophy</span></div>
+    <nav class="nav-links" id="navlinks">
+      <a href="index.html">সাইট দেখুন</a>
+    </nav>
+    <div class="nav-tools">
+      <div class="lang-dd">
+        <button class="nav-tool" id="lang-btn" type="button" data-i18n-keep title="ভাষা বদলান" aria-label="ভাষা বদলান"><span class="ld-cur" id="lang-cur">English</span><span class="ld-caret" aria-hidden="true">&#9662;</span></button>
+        <div class="lang-menu" id="lang-menu" role="listbox" aria-label="ভাষা" hidden>
+          <div class="lm-search"><input id="lang-search" type="text" placeholder="ভাষা খুঁজুন…" autocomplete="off" spellcheck="false"></div>
+          <ul class="lm-list" id="lang-list"></ul>
+          <p class="lm-empty" id="lang-empty" hidden>কোনো ভাষা মেলেনি</p>
+        </div>
+      </div>
+      <button class="nav-tool muted" id="sound-btn" type="button" data-i18n-keep aria-pressed="false" title="শব্দ বন্ধ" aria-label="শব্দ বন্ধ">
+        <svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path id="sound-on-wave" d="M16.5 8.8a4.4 4.4 0 0 1 0 6.4"/><path id="sound-off-line" d="m17 9.5 4 5m0-5-4 5"/></svg>
+      </button>
+    </div>
+    <button class="burger" id="burger" aria-label="মেনু">☰</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="page" id="page-admin">
+    <div id="admin-login" class="login reveal">
+      <div class="card">
+        <div style="text-align:center">
+          <span class="eyebrow" style="justify-content:center">মালিকের জন্য সুরক্ষিত এলাকা</span>
+          <h2 style="margin:10px 0 4px;font-weight:800">অ্যাডমিন লগইন</h2>
+          <p class="note" id="login-hint">শুধু মালিক স্টোর, আইটেম ও সেটিংস নিয়ন্ত্রণ করতে পারবেন।</p>
+        </div>
+        <form id="login-form" style="margin-top:18px">
+          <div class="field" id="lf-email-wrap"><label>ইমেইল</label><input id="lf-email" type="email" placeholder="আপনার ইমেইল" autocomplete="username"/></div>
+          <div class="field"><label>পাসওয়ার্ড</label><input id="lf-pass" type="password" placeholder="••••••" autocomplete="current-password"/></div>
+          <button class="btn primary full" type="submit" id="lf-signin">প্রবেশ করুন</button>
+          <p class="note" id="login-err" style="color:#ff9a9a;display:none;margin-top:10px"></p>
+          <div id="verify-box" style="display:none;margin-top:12px">
+            <p class="note" style="color:#ffd27a;margin:0">ইমেইল যাচাই করুন। আপনার ইনবক্সে পাঠানো লিংকে ক্লিক করুন।</p>
+            <button type="button" class="btn sm ghost" id="resend-verify" style="margin-top:8px">যাচাই-লিংক আবার পাঠান</button>
+            <p class="note" id="resend-msg" style="margin-top:8px;display:none"></p>
+          </div>
+        </form>
+        <div class="badge-sec" id="login-note"></div>
+      </div>
+    </div>
+
+    <div id="admin-panel" style="display:none">
+      <div class="admin-bar"><div><span class="eyebrow">কন্ট্রোল প্যানেল</span><h2 style="margin:6px 0 0;font-weight:800">সাইট ব্যবস্থাপনা</h2></div><div class="sp"></div>
+        <button class="btn sm ghost" id="logout-btn">লগআউট</button></div>
+      <!-- মোড বার্তা — শুধু মালিকের প্যানেলের ভেতরে, ভিজিটর পেজে এটি দেখতে পান না -->
+      <div class="modebar" id="modebar" style="border:1px solid var(--stroke);border-bottom:none;border-radius:14px;padding:10px 14px">
+        <span id="modebar-text">এই সাইট এখন <b>localStorage</b> মোডে চলছে। Firebase কনফিগ বসালেই Firestore/Auth-এ চলে যাবে।</span>
+        <span class="pill" id="modebar-pill">LOCAL</span>
+      </div>
+      <div class="tabs" id="admin-tabs">
+        <button class="tab on" data-tab="stores">স্টোর <span class="cnt" id="c-stores">0</span></button>
+        <button class="tab" data-tab="items">আইটেম <span class="cnt" id="c-items">0</span></button>
+        <button class="tab" data-tab="faq">FAQ <span class="cnt" id="c-faq">0</span></button>
+        <button class="tab" data-tab="messages">মেসেজ <span class="cnt" id="c-msg">0</span></button>
+        <button class="tab en" data-tab="about" data-i18n-keep>About DEEPostrophy</button>
+        <button class="tab" data-tab="settings">সাইট সেটিংস</button>
+        <button class="tab" data-tab="data">ডেটা</button>
+      </div>
+
+      <div class="tab-pane" id="pane-stores">
+        <div class="admin-bar"><h3 style="margin:0;font-weight:800">স্টোর ব্যবস্থাপনা</h3><div class="sp"></div><button class="btn sm primary" id="new-store-btn">+ নতুন স্টোর</button></div>
+        <div class="panel" style="padding:8px 6px;overflow:auto"><table class="pm"><thead><tr><th>ক্রম</th><th>নাম</th><th>ধরন</th><th>আইটেম</th><th>প্রকাশ</th><th>অ্যাকশন</th></tr></thead><tbody id="store-rows"></tbody></table></div>
+        <p class="note" style="margin-top:12px">↑ ↓ দিয়ে ক্রম বদলান। “প্রকাশ” বন্ধ থাকলে স্টোরটি সাইটে দেখাবে না। স্টোর মুছলে তার ভেতরের সব আইটেমও মুছে যাবে।</p>
+      </div>
+
+      <div class="tab-pane" id="pane-items" style="display:none">
+        <div class="admin-bar"><label style="font-weight:700;color:var(--muted)">স্টোর:</label><select class="pf" id="item-store-select" style="min-width:200px"></select><div class="sp"></div><button class="btn sm primary" id="new-item-btn">+ নতুন আইটেম</button></div>
+        <div id="items-admin-empty" class="empty" style="display:none"><b>প্রথমে একটি স্টোর তৈরি করুন।</b>আইটেম সবসময় কোনো না কোনো স্টোরের ভেতরে থাকে।</div>
+        <div class="panel" id="items-admin-wrap" style="padding:8px 6px;overflow:auto"><table class="pm"><thead><tr><th>ক্রম</th><th>নাম</th><th>ধরন</th><th>প্রকাশ</th><th>ফিচার</th><th>অ্যাকশন</th></tr></thead><tbody id="item-rows"></tbody></table></div>
+        <p class="note" style="margin-top:12px">“হোমে ফিচার” দিলে আইটেমটি হোমের ফিচারড সেকশনে দেখাবে। বইয়ের কপির জন্য লেখক/বছর, এক্সটেনশনের জন্য ইনস্টল নির্দেশ ফিল্ড ভরে দিন।</p>
+      </div>
+
+      <div class="tab-pane" id="pane-faq" style="display:none">
+        <div class="admin-bar"><h3 style="margin:0;font-weight:800">প্রশ্নোত্তর (FAQ)</h3><div class="sp"></div><button class="btn sm primary" id="new-faq-btn">+ নতুন প্রশ্ন</button></div>
+        <div class="panel" style="padding:8px 6px;overflow:auto"><table class="pm"><thead><tr><th>ক্রম</th><th>প্রশ্ন</th><th>অ্যাকশন</th></tr></thead><tbody id="faq-rows"></tbody></table></div>
+        <p class="note" style="margin-top:12px">এই প্রশ্নোত্তরগুলো সাইটের কোণার ভাসমান হেল্পারে দেখাবে। এগুলো আসল AI নয়, আগে থেকে লেখা উত্তর।</p>
+      </div>
+
+      <div class="tab-pane" id="pane-messages" style="display:none">
+        <div class="admin-bar"><h3 style="margin:0;font-weight:800">যোগাযোগ মেসেজ</h3><div class="sp"></div><button class="btn sm ghost" id="msg-refresh">রিফ্রেশ</button></div>
+        <div id="messages-list" style="display:flex;flex-direction:column;gap:12px"></div>
+        <p class="note" style="margin-top:12px">শুধু আপনি (মালিক) এই মেসেজ পড়তে পারবেন; সাধারণ দর্শক পাঠাতে পারবে কিন্তু কারও মেসেজ দেখতে পাবে না।</p>
+      </div>
+
+      <div class="tab-pane" id="pane-about" style="display:none">
+        <form id="about-form" class="panel">
+          <h3 class="en" data-i18n-keep>About DEEPostrophy</h3>
+          <div class="field"><label>About DEEPostrophy বিভাগের লেখা</label><textarea id="s-about" style="min-height:240px" placeholder="লক্ষ্য, দক্ষতা ও পথচলা…"></textarea></div>
+          <button class="btn primary" type="submit">লেখা সংরক্ষণ</button>
+          <p class="note" id="about-msg" style="display:none;margin-top:10px">সংরক্ষিত হয়েছে ✅</p>
+        </form>
+        <p class="note" style="margin-top:12px">এই লেখাটি সাইটের About DEEPostrophy বিভাগেই দেখায় — অন্য কোথাও নয়।</p>
+      </div>
+
+      <div class="tab-pane" id="pane-settings" style="display:none">
+        <form id="settings-form" class="panel">
+          <h3>সাইট সেটিংস</h3>
+          <div class="two">
+            <div class="field"><label>সাইটের নাম</label><input id="s-name"/></div>
+            <div class="field"><label>যোগাযোগের ইমেইল</label><input id="s-email" type="email" placeholder="you@example.com"/></div>
+          </div>
+          <div class="field"><label>হোমের পরিচয়ের লেখা (এক/দুই লাইন)</label><textarea id="s-identity" placeholder="আপনি কে, কী নিয়ে কাজ করেন…"></textarea><span class="note">খালি রাখলে হোমে এই লাইন দেখাবে না।</span></div>
+          <div class="field"><label>সোশ্যাল লিংক</label><div class="social-editor" id="social-editor"></div><button type="button" class="mini" id="add-social" style="align-self:flex-start;margin-top:8px">+ লিংক যোগ করুন</button><p class="note" style="margin-top:8px">শুধু আসল লিংক দিন (https:// বা mailto: দিয়ে শুরু)।</p></div>
+          <div class="field"><label>ভাষা</label><p class="note" style="margin-top:0">ডিফল্ট English; ভিজিটার নিজে বেছে নিলে সেটি মনে থাকে।</p>
+            <label class="toggle" style="margin-top:10px"><span class="sw" id="s-autolang"></span> <span>অটো-ভাষা চালু</span></label>
+            <span class="note">ভিজিটার এখনো ভাষা বেয়ে না রাখলে তাঁর ব্রাউজারের ভাষাটি চুপচাপ প্রয়োগ হবে — কোনো প্রশ্ন বা পপআপ আসবে না।</span>
+          </div>
+          <button class="btn primary" type="submit">সেটিংস সংরক্ষণ</button>
+          <p class="note" id="settings-msg" style="display:none;margin-top:10px">সংরক্ষিত হয়েছে ✅</p>
+        </form>
+      </div>
+
+      <div class="tab-pane" id="pane-data" style="display:none">
+        <div class="panel">
+          <h3>ডেটা রপ্তানি ও আমদানি</h3>
+          <p class="note" style="margin-top:0">পুরো সাইটের ডেটা (স্টোর, আইটেম, FAQ, সেটিংস, মেসেজ) এক JSON ফাইলে সংরক্ষণ বা ফিরিয়ে আনুন।</p>
+          <div class="hero-grid" style="margin-top:16px">
+            <button class="btn primary" id="export-btn">⬇ JSON রপ্তানি</button>
+            <label class="btn ghost" for="import-file" style="cursor:pointer">⬆ JSON আমদানি<input id="import-file" type="file" accept="application/json,.json" hidden/></label>
+          </div>
+          <p class="note" id="data-msg" style="margin-top:12px"></p>
+        </div>
+        <div class="panel" id="local-admin-panel" style="margin-top:20px">
+          <h3>লোকাল অ্যাডমিন পাসকোড</h3>
+          <p class="note" style="margin-top:0">Firebase কনফিগ বসানো না থাকলে প্যানেলে ঢুকতে এই লোকাল পাসকোড লাগে (এটি ডিফল্ট নয় — আপনি নিজে সেট করেন)। Firebase চালু হলে এটি প্রযোজ্য থাকবে না।</p>
+          <div class="field" style="margin-top:12px"><label>নতুন পাসকোড</label><input id="new-pass" type="password" placeholder="অন্তত ৪ অক্ষর"/></div>
+          <button class="btn ghost sm" id="set-pass-btn">পাসকোড সেট / বদলান</button>
+        </div>
+        <div class="panel" id="gh-settings-panel" style="margin-top:20px">
+          <h3>গিটহাব আপলোড (লোকাল → GitHub)</h3>
+          <p class="note" style="margin-top:0">PC থেকে ফাইল বেছে নিয়ে সরাসরি আপনার GitHub রিপোতে আপলোড করুন — ডাউনলোড, সোর্স ও কভার লিংক অটো-ফিল হবে। টোকেন কেবল আপনার এই ব্রাউজারে (localStorage) থাকে।</p>
+          <div class="two">
+            <div class="field" style="margin-top:12px"><label>Owner/Repo বা রিপোর লিংক</label><input id="gh-repo" placeholder="যেমন: arafath-rifath/deepostrophy-assets"/></div>
+            <div class="field" style="margin-top:12px"><label>GitHub টোকেন (classic: repo স্কোপ, বা fine-grained: Contents: Read and write)</label><input id="gh-token" type="password" placeholder="এখানে পেস্ট করুন (শুধু এই ব্রাউজারে জমা)" autocomplete="off"/></div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn ghost sm" type="button" id="gh-verify">টোকেন যাচাই</button>
+            <button class="btn primary sm" type="button" id="gh-save">সেভ করুন</button>
+            <button class="btn ghost sm" type="button" id="gh-clear">মুছে ফেলুন</button>
+          </div>
+          <p class="note" id="gh-status" style="margin-top:10px"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<dialog class="modal" id="store-modal">
+  <div class="modal-head"><h3 id="sm-title">স্টোর</h3><button class="mini" id="sm-x" type="button">✕</button></div>
+  <form class="modal-body" id="store-form">
+    <input type="hidden" id="s-id"/><div class="field"><label>নাম</label><input id="s-storeName" required placeholder="যেমন: আমার অ্যাপসমূহ"/></div>
+    <div class="two"><div class="field"><label>আইকন (একটি ইমোজি/অক্ষর)</label><input id="s-icon" placeholder="যেমন 📱"/></div><div class="field"><label>ধরন</label><select id="s-kind" class="pf"></select></div></div>
+    <div class="field"><label>বিবরণ</label><textarea id="s-desc" placeholder="এই স্টোরে কী কী থাকে…"></textarea></div>
+    <label class="toggle"><span class="sw on" id="s-published"></span> প্রকাশিত</label>
+  </form>
+  <div class="modal-foot"><button class="btn ghost sm" type="button" id="sm-cancel">বাতিল</button><button class="btn primary sm" type="button" id="sm-save">সংরক্ষণ</button></div>
+</dialog>
+
+<dialog class="modal" id="item-modal">
+  <div class="modal-head"><h3 id="im-title">আইটেম</h3><button class="mini" id="im-x" type="button">✕</button></div>
+  <form class="modal-body" id="item-form">
+    <input type="hidden" id="i-id"/>
+    <div class="two"><div class="field"><label>স্টোর</label><select id="i-store" class="pf"></select></div><div class="field"><label>ধরন (type)</label><select id="i-category" class="pf"></select></div></div>
+    <div class="field"><label>নাম</label><input id="i-name" required placeholder="যেমন: Wallora"/></div>
+    <div class="field"><label>এক লাইনের পরিচয় (tagline)</label><input id="i-tagline" placeholder="সংক্ষিপ্ত বর্ণনা"/></div>
+    <div class="field"><label>বিবরণ</label><textarea id="i-desc" placeholder="বিস্তারিত বিবরণ…"></textarea></div>
+    <div class="field"><label>ট্যাগ (কমা দিয়ে)</label><input id="i-tags" placeholder="Flutter, Firebase, Dark UI"/></div>
+    <div class="grp" id="grp-book" style="display:none"><label>বইয়ের কপি</label><div class="two"><div class="field"><label>লেখক</label><input id="i-author" placeholder="লেখকের নাম"/></div><div class="field"><label>বছর</label><input id="i-year" placeholder="2024"/></div></div></div>
+    <div class="grp" id="grp-ext" style="display:none"><label>এক্সটেনশন</label><div class="field" style="margin-bottom:0"><label>ইনস্টল নির্দেশ</label><textarea id="i-install" placeholder="কীভাবে ইনস্টল করবেন…"></textarea></div></div>
+    <div class="grp"><label>কভার</label>
+      <div class="field"><label>কভার রঙ</label><div class="accent-swatches" id="i-accents"></div></div>
+      <div style="display:flex;gap:8px;margin:2px 0 10px;flex-wrap:wrap">
+        <button type="button" class="btn primary sm" id="cv-tab-link">লিংক</button>
+        <button type="button" class="btn ghost sm" id="cv-tab-up">GitHub-এ আপলোড</button>
+      </div>
+      <div id="cv-link-rows">
+        <div class="field" style="margin-bottom:0"><label>কভার ছবির লিংক</label><input id="i-image" placeholder="https://… (ছবির সরাসরি লিংক)"/><span class="img-preview" id="i-image-preview"></span></div>
+      </div>
+      <div id="cv-upload-rows" style="display:none">
+        <div class="field" style="margin-bottom:0"><label>ফাইল বেছে নিন (PC থেকে)</label><input type="file" id="i-cv-file" accept="image/*"/><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px"><button type="button" class="btn primary sm" id="i-cv-run">ছবি আপলোড ⬆</button><span class="note" id="i-cv-status"></span></div></div>
+      </div>
+    </div>
+    <div class="grp"><label>ডাউনলোড ও লিংক</label>
+      <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+        <button type="button" class="btn primary sm" id="dl-tab-link">লিংক</button>
+        <button type="button" class="btn ghost sm" id="dl-tab-up">GitHub-এ আপলোড</button>
+      </div>
+      <div id="dl-link-rows">
+        <div class="field"><label>ডাউনলোড লিংক</label><input id="i-download" data-src="download" placeholder="https://github.com/…/releases/download/…/app.zip"/><p class="note" style="margin-top:6px">GitHub Release-এর asset লিংক বা যেকোনো সরাসরি ফাইল লিংক দিন।</p></div>
+        <div class="field" style="margin-bottom:0"><label>সোর্স লিংক</label><input id="i-source" data-src="source" placeholder="https://github.com/…"/></div>
+      </div>
+      <div id="dl-upload-rows" style="display:none">
+        <div class="field" style="margin-bottom:8px"><label>ফাইল বেছে নিন (PC থেকে)</label><input type="file" id="i-up-file"/><p class="note" style="margin-top:6px">আপলোড করলেই ডাউনলোড ও সোর্স লিংক অটো-ফিল হবে। বড় ফাইলে “লিংক” ট্যাবে সরাসরি লিংক দিন।</p></div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button type="button" class="btn primary sm" id="i-up-run">GitHub-এ আপলোড ⬆</button><span class="note" id="i-up-status"></span></div>
+      </div>
+    </div>
+    <div class="field"><label>README</label><textarea id="i-readme" placeholder="বিস্তারিত পাতায় দেখানোর নোট…"></textarea></div>
+    <div class="two"><label class="toggle"><span class="sw on" id="i-published"></span> প্রকাশিত</label><label class="toggle"><span class="sw" id="i-featured"></span> হোমে ফিচার</label></div>
+  </form>
+  <div class="modal-foot"><button class="btn ghost sm" type="button" id="im-cancel">বাতিল</button><button class="btn primary sm" type="button" id="im-save">সংরক্ষণ</button></div>
+</dialog>
+
+<dialog class="modal" id="faq-modal">
+  <div class="modal-head"><h3 id="fm-title">প্রশ্নোত্তর</h3><button class="mini" id="fm-x" type="button">✕</button></div>
+  <form class="modal-body"><input type="hidden" id="q-id"/>
+    <div class="field"><label>প্রশ্ন</label><input id="q-ask" required placeholder="যেমন: আপনি কী কী নিয়ে কাজ করেন?"/></div>
+    <div class="field"><label>উত্তর</label><textarea id="q-ans" required placeholder="এখানে উত্তর লিখুন…"></textarea></div>
+  </form>
+  <div class="modal-foot"><button class="btn ghost sm" type="button" id="fm-cancel">বাতিল</button><button class="btn primary sm" type="button" id="fm-save">সংরক্ষণ</button></div>
+</dialog>
+
+<footer>
+  <div class="wrap foot">
+    <div class="en" data-i18n-keep>© 2026 DEEPostrophy · ARAFATH</div>
+    <div style="display:flex;gap:16px"><a href="index.html">সাইট দেখুন</a></div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   admin.html — মালিকের কন্ট্রোল প্যানেল। পাবলিক মেনুতে এর লিংক নেই;
+   মালিক সরাসরি এই ফাইল খুলবেন। একই Firebase প্রজেক্ট, একই ডেটা, একই ডিজাইন।
+   window.DEEO_ADMIN থাকলে মোজাইক/ড্রিফট/বাড়তি অ্যানিমেশন চলবে না।
+   ========================================================= */
+const PAGES = ["admin"];
+
+/* =========================================================
+   অ্যাডমিন UI
+   ========================================================= */
+let activeTab="stores";
+async function renderAdmin(){
+  const authed=Auth.isAdmin();
+  $("admin-login").style.display=authed?"none":""; $("admin-panel").style.display=authed?"":"none";
+  configureLoginForm();
+  if(authed){ await loadData(); renderAdminTabs(); renderTab(); }
+}
+function configureLoginForm(){
+  const fs=MODE==="fs";
+  $("lf-email-wrap").style.display=fs?"":"none";
+  $("lf-signin").textContent=t(fs?"প্রবেশ করুন":"প্রবেশ");
+  $("login-err").style.display="none"; $("verify-box").style.display="none";
+  const note=$("login-note");
+  note.innerHTML = t("শুধু মালিকই এখানে ঢুকতে পারবেন।");
+  if(!fs){
+    const saved=localStorage.getItem("deeo.adminpass"); $("lf-pass").placeholder=t(saved?"পাসকোড":"নতুন পাসকোড সেট করুন (৪+ অক্ষর)");
+  }
+}
+$("login-form").addEventListener("submit", async e=>{
+  e.preventDefault(); const err=$("login-err"); err.style.display="none"; $("verify-box").style.display="none";
+  const email=MODE==="fs"?$("lf-email").value.trim():"local"; const pass=$("lf-pass").value;
+  try{ const r=await Auth.signIn({email,pass});
+    if(r.ok){ $("lf-pass").value=""; await renderAdmin(); }
+    else if(r.needVerify){ $("verify-box").style.display="block"; }
+    else if(r.notOwner){ err.textContent=t("আপনি মালিক নন।"); err.style.display="block"; await Auth.signOut(); }
+    else { err.textContent=t(r.err||"লগইন ব্যর্থ।"); err.style.display="block"; }
+  }catch(ex){ err.textContent=t("সংযোগে সমস্যা হয়েছে। আবার চেষ্টা করুন।"); err.style.display="block"; console.error(ex); }
+});
+$("resend-verify").addEventListener("click", async ()=>{ const m=$("resend-msg"); m.style.display="block"; m.style.color="var(--muted)"; m.textContent=t("পাঠানো হচ্ছে…");
+  try{ const { sendEmailVerification }=FB.api; await sendEmailVerification(Auth.user); m.style.color="var(--a2)"; m.textContent=t("যাচাই-লিংক পাঠানো হয়েছে ✅ ইনবক্স (না-থাকলে স্প্যাম) দেখুন, লিংকে ক্লিক করুন, তারপর আবার লগইন করুন।"); }
+  catch(ex){ m.style.color="#ff9a9a"; m.textContent=tr("পাঠানো যায়নি: {msg}",{msg:ex.message||ex}); } });
+$("logout-btn").addEventListener("click", async ()=>{ await Auth.signOut(); renderAdmin(); });
+
+function renderAdminTabs(){ $("c-stores").textContent=S.stores.length; $("c-items").textContent=S.items.length; $("c-faq").textContent=S.faq.length; $("c-msg").textContent=S.messages.length; }
+$("admin-tabs").addEventListener("click", e=>{ const t=e.target.closest(".tab"); if(t){ activeTab=t.dataset.tab; renderTab(); } });
+function renderTab(){
+  document.querySelectorAll("#admin-tabs .tab").forEach(t=>t.classList.toggle("on",t.dataset.tab===activeTab));
+  ["stores","items","faq","messages","about","settings","data"].forEach(p=>$("pane-"+p).style.display=p===activeTab?"":"none");
+  if(activeTab==="stores") renderStoreTable();
+  if(activeTab==="items"){ renderItemSelect(); renderItemTable(); }
+  if(activeTab==="faq") renderFaqTable();
+  if(activeTab==="messages") renderMessages();
+  if(activeTab==="about") openAbout();
+  if(activeTab==="settings") openSettings();
+  $("local-admin-panel").style.display = MODE==="fs"?"none":"";
+}
+
+/* স্টোর */
+function renderStoreTable(){
+  if(!S.stores.length){ $("store-rows").innerHTML=`<tr><td colspan="6" style="color:var(--muted)">এখনো কোনো স্টোর নেই। “+ নতুন স্টোর” চেপে শুরু করুন।</td></tr>`; return; }
+  $("store-rows").innerHTML=S.stores.map(s=>{ const k=KINDS[s.kind]||KINDS.custom; return `<tr>
+    <td><div class="row-actions"><button class="mini" data-s-up="${s.id}">↑</button><button class="mini" data-s-dn="${s.id}">↓</button></div></td>
+    <td><b data-i18n-keep>${esc(s.icon||k.icon)} ${esc(s.name)}</b><div class="note" data-i18n-keep>${esc((s.description||"").slice(0,40))}</div></td>
+    <td>${esc(t(k.label))}</td><td>${countItems(s.id)}</td><td><span class="sw ${s.published?"on":""}" data-s-pub="${s.id}"></span></td>
+    <td><div class="row-actions"><button class="mini" data-s-edit="${s.id}">সম্পাদনা</button><button class="mini" data-s-view="${s.id}">খুলুন</button><button class="mini danger" data-s-del="${s.id}">মুছুন</button></div></td></tr>`; }).join("");
+}
+$("store-rows").addEventListener("click", async e=>{
+  const up=e.target.closest("[data-s-up]"),dn=e.target.closest("[data-s-dn]"),ed=e.target.closest("[data-s-edit]"),del=e.target.closest("[data-s-del]"),pub=e.target.closest("[data-s-pub]"),view=e.target.closest("[data-s-view]");
+  if(up||dn){ const id=(up||dn).dataset[up?"sUp":"sDn"]; const ids=S.stores.map(s=>s.id); const i=ids.indexOf(id),j=i+(up?-1:1); if(j>=0&&j<ids.length){ [ids[i],ids[j]]=[ids[j],ids[i]]; await DB.reorder("stores",ids); await loadData(); renderStoreTable(); } }
+  if(pub){ const id=pub.dataset.sPub; const s=storeById(id); await DB.writeStore(Object.assign({},s,{published:!s.published})); await loadData(); renderStoreTable(); }
+  if(ed) openStoreModal(ed.dataset.sEdit);
+  if(view) location.href="index.html#store/"+view.dataset.sView;
+  if(del){ const s=storeById(del.dataset.sDel); if(confirm(tr("“{name}” স্টোরটি মুছে ফেলবেন? ভেতরের সব আইটেমও মুছে যাবে।",{name:s?s.name:""}))){ await DB.removeStore(del.dataset.sDel); await loadData(); renderStoreTable(); renderAdminTabs(); } }
+});
+const smodal=$("store-modal");
+function fillKindSelect(){ $("s-kind").innerHTML=Object.keys(KINDS).map(k=>`<option value="${k}">${esc(t(KINDS[k].label))}</option>`).join(""); }
+function openStoreModal(id){ const s=id?storeById(id):null; $("sm-title").textContent=s?"স্টোর সম্পাদনা":"নতুন স্টোর"; $("s-id").value=s?s.id:""; $("s-storeName").value=s?s.name:""; $("s-icon").value=s?s.icon||"":""; fillKindSelect(); $("s-kind").value=s?s.kind:"apps"; $("s-desc").value=s?s.description||"":""; $("s-published").classList.toggle("on",s?s.published:true); smodal.showModal(); }
+$("new-store-btn").addEventListener("click",()=>openStoreModal("")); $("sm-x").addEventListener("click",()=>smodal.close()); $("sm-cancel").addEventListener("click",()=>smodal.close()); $("s-published").addEventListener("click",()=>$("s-published").classList.toggle("on"));
+$("sm-save").addEventListener("click", async ()=>{ if(!$("s-storeName").value.trim()){ $("s-storeName").focus(); return; }
+  await DB.writeStore({ id:$("s-id").value||uid(), name:$("s-storeName").value.trim(), icon:$("s-icon").value.trim(), kind:$("s-kind").value, description:$("s-desc").value.trim(), published:$("s-published").classList.contains("on"), order: $("s-id").value?(storeById($("s-id").value)||{}).order:S.stores.length });
+  smodal.close(); await loadData(); renderStoreTable(); renderAdminTabs(); });
+
+/* আইটেম */
+function renderItemSelect(){ const sel=$("item-store-select"); sel.innerHTML=S.stores.map(s=>`<option value="${s.id}" data-i18n-keep>${esc(s.icon||(KINDS[s.kind]||KINDS.custom).icon)} ${esc(s.name)}</option>`).join("")||`<option value="">— কোনো স্টোর নেই —</option>`; }
+function renderItemTable(){
+  const sel=$("item-store-select"); const cur=sel.value||(S.stores[0]||{}).id||""; sel.value=cur;
+  const no=!cur; $("items-admin-empty").style.display=no?"":"none"; $("items-admin-wrap").style.display=no?"none":""; $("new-item-btn").classList.toggle("disabled",no); if(no) return;
+  const items=itemsOf(cur);
+  if(!items.length){ $("item-rows").innerHTML=`<tr><td colspan="6" style="color:var(--muted)">এই স্টোরে এখনো আইটেম নেই। “+ নতুন আইটেম” চেপে যোগ করুন।</td></tr>`; return; }
+  $("item-rows").innerHTML=items.map(it=>`<tr>
+    <td><div class="row-actions"><button class="mini" data-i-up="${it.id}">↑</button><button class="mini" data-i-dn="${it.id}">↓</button></div></td>
+    <td><b data-i18n-keep>${esc(it.name)}</b><div class="note" data-i18n-keep>${esc((it.tagline||"").slice(0,40))}</div></td><td>${esc(t(it.category||"—"))}</td>
+    <td><span class="sw ${it.published?"on":""}" data-i-pub="${it.id}"></span></td><td><span class="sw ${it.featured?"on":""}" data-i-feat="${it.id}"></span></td>
+    <td><div class="row-actions"><button class="mini" data-i-edit="${it.id}">সম্পাদনা</button><button class="mini" data-i-view="${it.id}">খুলুন</button><button class="mini danger" data-i-del="${it.id}">মুছুন</button></div></td></tr>`).join("");
+}
+$("item-store-select").addEventListener("change",renderItemTable);
+$("item-rows").addEventListener("click", async e=>{
+  const up=e.target.closest("[data-i-up]"),dn=e.target.closest("[data-i-dn]"),ed=e.target.closest("[data-i-edit]"),del=e.target.closest("[data-i-del]"),pub=e.target.closest("[data-i-pub]"),feat=e.target.closest("[data-i-feat]"),view=e.target.closest("[data-i-view]");
+  if(up||dn){ const id=(up||dn).dataset[up?"iUp":"iDn"]; const it=itemById(id); const ids=itemsOf(it.storeId).map(x=>x.id); const i=ids.indexOf(id),j=i+(up?-1:1); if(j>=0&&j<ids.length){ [ids[i],ids[j]]=[ids[j],ids[i]]; await DB.reorder("items",ids); await loadData(); renderItemTable(); } }
+  if(pub){ const it=itemById(pub.dataset.iPub); await DB.writeItem(Object.assign({},it,{published:!it.published})); await loadData(); renderItemTable(); }
+  if(feat){ const it=itemById(feat.dataset.iFeat); await DB.writeItem(Object.assign({},it,{featured:!it.featured})); await loadData(); renderItemTable(); }
+  if(ed) openItemModal(ed.dataset.iEdit);
+  if(view) location.href="index.html#item/"+view.dataset.iView;
+  if(del){ const it=itemById(del.dataset.iDel); if(confirm(tr("“{name}” আইটেমটি মুছে ফেলবেন?",{name:it?it.name:""}))){ await DB.removeItem(del.dataset.iDel); await loadData(); renderItemTable(); renderAdminTabs(); } }
+});
+
+/* আইটেম মডাল + আপলোড */
+const imodal=$("item-modal");
+function fillItemTypeSelect(){ $("i-category").innerHTML=ITEM_TYPES.map(x=>`<option value="${x}">${esc(t(x))}</option>`).join("")+`<option value="অন্যান্য">${esc(t("অন্যান্য"))}</option>`; }
+function toggleTypeGroups(){ const c=$("i-category").value; $("grp-book").style.display=c==="বইয়ের কপি"?"":"none"; $("grp-ext").style.display=c==="পাইথন এক্সটেনশন"?"":"none"; }
+function fillAccents(cur){ $("i-accents").innerHTML=PALETTE.map(p=>`<span class="sw-acc ${p===cur?"on":""}" data-pal="${p}" style="background:${p}"></span>`).join("")+`<span class="sw-acc ${cur&&!PALETTE.includes(cur)?"on":""}" id="acc-custom" style="background:${esc(cur||PALETTE[0])}" title="নিজের রঙ"><input type="color" id="acc-color" value="${/^#/.test(cur||"")?cur:"#8b5cf6"}"></span>`;
+  document.querySelectorAll("#i-accents [data-pal]").forEach(s=>s.addEventListener("click",()=>{ document.querySelectorAll("#i-accents .sw-acc").forEach(x=>x.classList.remove("on")); s.classList.add("on"); }));
+  const c=$("acc-color"); if(c) c.addEventListener("input",()=>{ document.querySelectorAll("#i-accents .sw-acc").forEach(x=>x.classList.remove("on")); $("acc-custom").classList.add("on"); $("acc-custom").style.background=c.value; $("i-image").value=""; updateImagePreview(); });
+}
+function updateImagePreview(){ const v=$("i-image").value.trim(); $("i-image-preview").style.background=isValidUrl(v)?`center/cover no-repeat url('${v.replace(/'/g,"%27")}')`:""; }
+function openItemModal(id){
+  if(!S.stores.length){ alert(t("প্রথমে একটি স্টোর তৈরি করুন।")); return; }
+  const it=id?itemById(id):null; $("im-title").textContent=it?"আইটেম সম্পাদনা":"নতুন আইটেম";
+  $("item-store-select").value=it?it.storeId:($("item-store-select").value||S.stores[0].id); $("i-store").innerHTML=$("item-store-select").innerHTML; $("i-store").value=it?it.storeId:S.stores[0].id;
+  $("i-id").value=it?it.id:""; $("i-name").value=it?it.name:""; $("i-tagline").value=it?it.tagline||"":""; $("i-desc").value=it?it.description||"":""; fillItemTypeSelect(); $("i-category").value=it?it.category||"অন্যান্য":"অ্যাপ"; toggleTypeGroups();
+  $("i-tags").value=it?(it.tags||[]).join(", "):""; $("i-author").value=it?it.author||"":""; $("i-year").value=it?it.year||"":""; $("i-install").value=it?it.installSteps||"":"";
+  $("i-source").value=it&&it.links?it.links.source||"":""; $("i-download").value=it&&it.links?it.links.download||"":""; $("i-readme").value=it?it.readme||"":"";
+  $("i-image").value=it?it.coverImage||"":""; fillAccents(it?it.coverColor||PALETTE[0]:PALETTE[0]); updateImagePreview();
+  $("i-published").classList.toggle("on",it?it.published:true); $("i-featured").classList.toggle("on",it?!!it.featured:false);
+  imodal.showModal();
+}
+$("new-item-btn").addEventListener("click",()=>openItemModal("")); $("i-category").addEventListener("change",toggleTypeGroups); $("i-image").addEventListener("input",updateImagePreview);
+$("im-x").addEventListener("click",()=>imodal.close()); $("im-cancel").addEventListener("click",()=>imodal.close());
+$("i-published").addEventListener("click",()=>$("i-published").classList.toggle("on")); $("i-featured").addEventListener("click",()=>$("i-featured").classList.toggle("on"));
+$("im-save").addEventListener("click", async ()=>{
+  if(!$("i-name").value.trim()){ $("i-name").focus(); return; }
+  const accOn=document.querySelector("#i-accents .sw-acc.on"); const color=accOn?(accOn.dataset.pal||accOn.style.background):PALETTE[0];
+  const existing=$("i-id").value?itemById($("i-id").value):null;
+  const obj={ id:$("i-id").value||uid(), storeId:$("i-store").value, name:$("i-name").value.trim(), tagline:$("i-tagline").value.trim(), description:$("i-desc").value.trim(),
+    category:$("i-category").value, tags:splitList($("i-tags").value), coverColor:color, coverImage:$("i-image").value.trim(),
+    links:{source:$("i-source").value.trim(), download:$("i-download").value.trim()},
+    readme:$("i-readme").value, author:$("i-author").value.trim(), year:$("i-year").value.trim(), installSteps:$("i-install").value,
+    published:$("i-published").classList.contains("on"), featured:$("i-featured").classList.contains("on"),
+    order: existing?existing.order:itemsOf($("i-store").value).length };
+  await DB.writeItem(obj); imodal.close(); await loadData(); renderItemTable(); renderAdminTabs();
+});
+
+/* --- FAQ --- */
+function renderFaqTable(){ if(!S.faq.length){ $("faq-rows").innerHTML=`<tr><td colspan="3" style="color:var(--muted)">এখনো কোনো প্রশ্ন নেই। “+ নতুন প্রশ্ন” চেপে যোগ করুন।</td></tr>`; return; }
+  $("faq-rows").innerHTML=S.faq.map((f,i)=>`<tr><td><div class="row-actions"><button class="mini" data-f-up="${f.id}">↑</button><button class="mini" data-f-dn="${f.id}">↓</button></div></td><td><b data-i18n-keep>${esc(f.q)}</b><div class="note" data-i18n-keep>${esc((f.a||"").slice(0,60))}</div></td><td><div class="row-actions"><button class="mini" data-f-edit="${f.id}">সম্পাদনা</button><button class="mini danger" data-f-del="${f.id}">মুছুন</button></div></td></tr>`).join(""); }
+const fmodal=$("faq-modal");
+$("faq-rows").addEventListener("click", async e=>{ const up=e.target.closest("[data-f-up]"),dn=e.target.closest("[data-f-dn]"),ed=e.target.closest("[data-f-edit]"),del=e.target.closest("[data-f-del]");
+  if(up||dn){ const id=(up||dn).dataset[up?"fUp":"fDn"]; const ids=S.faq.map(f=>f.id); const i=ids.indexOf(id),j=i+(up?-1:1); if(j>=0&&j<ids.length){ [ids[i],ids[j]]=[ids[j],ids[i]]; await DB.reorder("faq",ids); await loadData(); renderFaqTable(); } }
+  if(ed){ const f=S.faq.find(x=>x.id===ed.dataset.fEdit); $("fm-title").textContent="প্রশ্ন সম্পাদনা"; $("q-id").value=f.id; $("q-ask").value=f.q; $("q-ans").value=f.a; fmodal.showModal(); }
+  if(del){ if(confirm(t("প্রশ্নটি মুছে ফেলবেন?"))){ await DB.removeFaq(del.dataset.fDel); await loadData(); renderFaqTable(); renderAdminTabs(); } }
+});
+$("new-faq-btn").addEventListener("click",()=>{ $("fm-title").textContent="নতুন প্রশ্ন"; $("q-id").value=""; $("q-ask").value=""; $("q-ans").value=""; fmodal.showModal(); });
+$("fm-x").addEventListener("click",()=>fmodal.close()); $("fm-cancel").addEventListener("click",()=>fmodal.close());
+$("fm-save").addEventListener("click", async ()=>{ if(!$("q-ask").value.trim()||!$("q-ans").value.trim()){ $("q-ask").focus(); return; }
+  await DB.writeFaq({ id:$("q-id").value||uid(), q:$("q-ask").value.trim(), a:$("q-ans").value, order: $("q-id").value?(S.faq.find(x=>x.id===$("q-id").value)||{}).order:S.faq.length });
+  fmodal.close(); await loadData(); renderFaqTable(); renderAdminTabs(); });
+
+/* --- Messages --- */
+function renderMessages(){ if(!S.messages.length){ $("messages-list").innerHTML=`<div class="empty"><b>কোনো মেসেজ নেই।</b>যোগাযোগ ফর্ম থেকে আসা মেসেজ এখানে দেখাবে।</div>`; return; }
+  $("messages-list").innerHTML=S.messages.map(m=>{ const dt=(m.ts&&typeof m.ts.toDate==="function")?m.ts.toDate():new Date(tsNum(m.ts)||Date.now()); return `<div class="panel"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><b data-i18n-keep>${esc(m.name||"—")}</b><span class="note">${esc(dt.toLocaleString(LANG==="en"?"en-GB":undefined))}</span></div><div class="note" data-i18n-keep>${esc(m.email||"")}</div><div class="readme" style="margin-top:8px" data-i18n-keep>${esc(m.body||m.text||"")}</div></div>`; }).join(""); }
+$("msg-refresh").addEventListener("click", async ()=>{ await loadData(); renderMessages(); renderAdminTabs(); });
+
+/* --- Settings --- */
+function renderSocialEditor(){ const s=S.settings.social||[]; $("social-editor").innerHTML=s.map((x,i)=>`<div class="se-row" data-i="${i}"><input data-f="label" placeholder="লেবেল (যেমন GitHub)" value="${esc(x.label||"")}"/><input data-f="url" placeholder="https://…" value="${esc(x.url||"")}"/><button type="button" class="mini danger" data-rm="${i}">✕</button></div>`).join(""); }
+function openSettings(){ const s=S.settings; $("s-name").value=s.siteName||""; $("s-email").value=(s.email||"").replace(/^mailto:/i,""); $("s-identity").value=s.identity||""; $("s-autolang").classList.toggle("on", !!s.autoLang); renderSocialEditor(); }
+$("s-autolang").addEventListener("click", ()=>$("s-autolang").classList.toggle("on"));
+function openAbout(){ $("s-about").value = S.settings.about || ""; }
+$("about-form").addEventListener("submit", async e=>{ e.preventDefault();
+  await DB.setSettings({ about: $("s-about").value });
+  await loadData(); const m=$("about-msg"); m.style.display=""; setTimeout(()=>m.style.display="none",1800);
+});
+$("settings-form").addEventListener("submit", async e=>{ e.preventDefault();
+  const social=[...document.querySelectorAll("#social-editor .se-row")].map(r=>({label:r.querySelector('[data-f="label"]').value.trim(),url:r.querySelector('[data-f="url"]').value.trim()})).filter(x=>x.url&&isValidUrl(x.url));
+  const em=$("s-email").value.trim();
+  const settings={ siteName:$("s-name").value.trim()||"DEEPostrophy", identity:$("s-identity").value, email:em?(em.includes("@")&&!/^mailto:/i.test(em)?"mailto:"+em:em):"", social, autoLang:$("s-autolang").classList.contains("on") };
+  await DB.setSettings(settings); await loadData(); refreshBrand(); const m=$("settings-msg"); m.style.display=""; setTimeout(()=>m.style.display="none",1800);
+});
+$("add-social").addEventListener("click", async ()=>{ const s=[...(S.settings.social||[]),{label:"",url:""}]; await DB.setSettings({social:s}); await loadData(); renderSocialEditor(); });
+$("social-editor").addEventListener("click", async e=>{ const rm=e.target.closest("[data-rm]"); if(rm){ const s=[...(S.settings.social||[])]; s.splice(+rm.dataset.rm,1); await DB.setSettings({social:s}); await loadData(); renderSocialEditor(); } });
+
+/* --- Data export/import + passcode --- */
+$("export-btn").addEventListener("click", ()=>{ const blob=new Blob([JSON.stringify(S.raw||{},null,2)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="deepostrophy-data.json"; a.click(); URL.revokeObjectURL(a.href); });
+$("import-file").addEventListener("change", async e=>{ const f=e.target.files[0]; if(!f) return; const msg=$("data-msg"); const rd=new FileReader();
+  rd.onload=async ()=>{ try{ let d=JSON.parse(rd.result); if(d.id||d.stores){ await DB.replaceAll(d); } else if(Array.isArray(d)){ await DB.replaceAll({stores:d}); } await loadData(); renderAdminTabs(); msg.style.color="var(--a2)"; msg.textContent=t("আমদানি সফল ✅"); }catch(err){ msg.style.color="#ff9a9a"; msg.textContent=t("ফাইল পড়া যায়নি — সঠিক JSON দিন।"); } }; rd.readAsText(f); e.target.value=""; });
+$("set-pass-btn").addEventListener("click", ()=>{ const v=$("new-pass").value; if(v.length<4){ alert(t("পাসকোড অন্তত ৪ অক্ষর।")); return; } localStorage.setItem("deeo.adminpass", btoa(v)); $("new-pass").value=""; alert(t("লোকাল পাসকোড সেট হয়েছে ✅")); });
+
+/* =========================================================
+   গিটহাব লোকাল-আপলোড — Settings + আইটেম মডালের লিংক/আপলোড টগল
+   ========================================================= */
+function ghStatus(msg,color){ const el=$("gh-status"); if(el){ el.style.color=color||""; el.textContent=msg; } }
+function ghSetStatus(id,msg,color){ const el=$(id); if(el){ el.style.color=color||""; el.textContent=msg; } }
+function ghTabs(which,mode){ const linkOn=mode!=="up";
+  const tl=$(which+"-tab-link"), tu=$(which+"-tab-up"), rows=$(which+"-link-rows"), upr=$(which+"-upload-rows");
+  if(tl) tl.className="btn "+(linkOn?"primary":"ghost")+" sm";
+  if(tu) tu.className="btn "+(linkOn?"ghost":"primary")+" sm";
+  if(rows) rows.style.display=linkOn?"":"none";
+  if(upr) upr.style.display=linkOn?"none":"";
+}
+function resetItemModalControls(){ const uf=$("i-up-file"), cf=$("i-cv-file"); if(uf) uf.value=""; if(cf) cf.value="";
+  ghSetStatus("i-up-status",""); ghSetStatus("i-cv-status",""); ghTabs("dl","link"); ghTabs("cv","link"); }
+imodal.addEventListener("open", resetItemModalControls);
+
+const ghOn=(id,ev,fn)=>{ const el=$(id); if(el) el.addEventListener(ev,fn); };
+
+/* Settings — প্রিফিল + সেভ + যাচাই + মুছুন */
+function ghInit(){ const st=GH.settings(); const r=$("gh-repo"); if(r) r.value=st.repo||"";
+  if(st.token&&st.repo){ const pr=GH.parseRepo(st.repo); ghStatus("✅ "+(pr?pr.owner+"/"+pr.name:st.repo),"var(--muted)"); } }
+ghInit();
+ghOn("gh-save","click",()=>{ const repo=$("gh-repo").value.trim(), token=$("gh-token").value.trim();
+  if(!repo||!token){ ghStatus(t("প্রথমে টোকেন ও রিপো দিন।"),"#ff9a9a"); return; }
+  const pr=GH.parseRepo(repo); if(!pr){ ghStatus(t("রিপো পাওয়া যায়নি বা লেখার অনুমতি নেই।"),"#ff9a9a"); return; }
+  GH.save({repo,token}); $("gh-token").value=""; ghStatus("✅ "+pr.owner+"/"+pr.name,"var(--a2)"); });
+ghOn("gh-verify","click",async()=>{ const repo=$("gh-repo").value.trim(), token=$("gh-token").value.trim();
+  if(!repo||!token){ ghStatus(t("প্রথমে টোকেন ও রিপো দিন।"),"#ff9a9a"); return; }
+  const pr=GH.parseRepo(repo); if(!pr){ ghStatus(t("রিপো পাওয়া যায়নি বা লেখার অনুমতি নেই।"),"#ff9a9a"); return; }
+  GH.save({repo,token}); $("gh-token").value=""; ghStatus(t("টোকেন যাচাই হচ্ছে…"),"");
+  try{ const u=await GH.authedUser(); const branch=await GH.currentBranch(pr.owner,pr.name); let ok=false;
+    try{ const br=await fetch("https://api.github.com/repos/"+pr.owner+"/"+pr.name+"/branches/"+branch,{headers:ghHeaders(false)}); ok=br.status===200; }catch(e){}
+    if(!ok){ ghStatus(t("রিপো পাওয়া যায়নি বা লেখার অনুমতি নেই।")+" · @"+u.login,"#ff9a9a"); return; }
+    ghStatus(t("টোকেন সঠিক ✅")+" · @"+u.login+" · "+pr.owner+"/"+pr.name+" ("+branch+") · "+t("রিপো লেখার অনুমতি ✅"),"var(--a2)");
+  }catch(ex){ ghStatus((ex&&ex.message)?ex.message:t("টোকেন সঠিক নয়।"),"#ff9a9a"); } });
+ghOn("gh-clear","click",()=>{ GH.clear(); const tk=$("gh-token"); if(tk) tk.value=""; const rp=$("gh-repo"); if(rp) rp.value=""; ghStatus(t("মুছে ফেলা হয়েছে।"),"#ff9a9a"); });
+
+/* টগল ট্যাব */
+ghOn("dl-tab-link","click",()=>ghTabs("dl","link")); ghOn("dl-tab-up","click",()=>ghTabs("dl","up"));
+ghOn("cv-tab-link","click",()=>ghTabs("cv","link")); ghOn("cv-tab-up","click",()=>ghTabs("cv","up"));
+
+/* আইটেমের ডাউনলোড ফাইল আপলোড → ডাউনলোড + সোর্স অটো-ফিল */
+ghOn("i-up-run","click",async()=>{ const inp=$("i-up-file"), f=inp&&inp.files[0];
+  if(!f){ ghSetStatus("i-up-status",t("প্রথমে একটি ফাইল বেছে নিন।"),"#ff9a9a"); return; }
+  if(!GH.configured()){ ghSetStatus("i-up-status",t("প্রথমে Settings → গিটহাব আপলোড-এ টোকেন ও রিপো দিন।"),"#ff9a9a"); return; }
+  const btn=$("i-up-run"); ghSetStatus("i-up-status",t("ফাইল আপলোড হচ্ছে…")); if(btn) btn.disabled=true;
+  try{ const nm=stripExt(($("i-name").value.trim())||f.name); const res=await GH.upload(f,"uploads/files",nm);
+    $("i-download").value=res.downloadUrl; $("i-source").value=res.pageUrl;
+    ghSetStatus("i-up-status",t("আপলোড হয়েছে ✅ — ডাউনলোড ও সোর্স লিংক অটো-ফিল হয়েছে")+" · "+res.name+" ("+humanSize(res.size)+")","var(--a2)");
+  }catch(ex){ ghSetStatus("i-up-status",t("GitHub আপলোড ব্যর্থ: ")+(ex&&ex.message?ex.message:""),"#ff9a9a"); }
+  if(btn) btn.disabled=false; });
+
+/* কভার ছবি আপলোড → কভার লিংক অটো-ফিল (URL ভিজিটর দেখে না, শুধু ছবি) */
+ghOn("i-cv-run","click",async()=>{ const inp=$("i-cv-file"), f=inp&&inp.files[0];
+  if(!f){ ghSetStatus("i-cv-status",t("প্রথমে একটি ফাইল বেছে নিন।"),"#ff9a9a"); return; }
+  if(!GH.configured()){ ghSetStatus("i-cv-status",t("প্রথমে Settings → গিটহাব আপলোড-এ টোকেন ও রিপো দিন।"),"#ff9a9a"); return; }
+  const btn=$("i-cv-run"); ghSetStatus("i-cv-status",t("কভার ছবি আপলোড হচ্ছে…")); if(btn) btn.disabled=true;
+  try{ const nm=stripExt(($("i-name").value.trim())||f.name); const res=await GH.upload(f,"uploads/covers",nm);
+    $("i-image").value=res.mediaUrl; updateImagePreview();
+    ghSetStatus("i-cv-status",t("কভার আপলোড হয়েছে — লিংক বসে গেছে ✅"),"var(--a2)");
+  }catch(ex){ ghSetStatus("i-cv-status",t("GitHub আপলোড ব্যর্থ: ")+(ex&&ex.message?ex.message:""),"#ff9a9a"); }
+  if(btn) btn.disabled=false; });
+
+/* ---- মোডের খবর — শুধু প্যানেলের ভেতরে ---- */
+function updateModebar(){
+  const mb = $("modebar"); if (!mb) return;
+  mb.classList.add("show");
+  if (MODE === "ls") { $("modebar-pill").textContent = t("LOCAL"); $("modebar-text").innerHTML = t("এই সাইট এখন <b>localStorage</b> মোডে চলছে। Firebase কনফিগ বসালেই Firestore/Auth-এ চলে যাবে।"); }
+  else { $("modebar-pill").textContent = t("FIREBASE"); $("modebar-text").innerHTML = t("Firebase মোড সক্রিয়। সব ভিজিটর প্রকাশিত কন্টেন্ট দেখবেন।"); }
+}
+
+/* ---- রুটিং: এই পেজে একটিই অংশ ---- */
+async function route(){
+  showPage("admin");
+  setActiveNav("#admin");
+  refreshBrand();
+  observeReveals();
+}
+
+/* ---- বুট ---- */
+async function boot(){
+  await bootShared();
+  fillKindSelect();
+  updateModebar();
+  await renderAdmin();
+  await route();
+  applyI18n(document.body);
+  updateLangBtn(); updateSoundBtn();
+  $("boot").classList.add("hide");
+}
+boot();
+</script>
+</body>
+</html>

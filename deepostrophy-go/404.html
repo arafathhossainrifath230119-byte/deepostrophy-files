@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>404 — DEEPostrophy</title>
+<meta name="description" content="Nothing was found at this address. Go back to DEEPostrophy." />
+<meta name="theme-color" content="#07070c" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%238b5cf6'/%3E%3Cstop%20offset='1'%20stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='100'%20height='100'%20rx='22'%20fill='%2307070c'/%3E%3Crect%20x='14'%20y='14'%20width='72'%20height='72'%20rx='16'%20fill='url(%23g)'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#07070c; --bg-2:#0b0b14; --ink:#eef0ff; --muted:#a7a9c4;
+    --a1:#8b5cf6; --a2:#22d3ee;
+    --glass:rgba(255,255,255,.045); --glass-strong:rgba(255,255,255,.07); --stroke:rgba(255,255,255,.10);
+    --stroke-2:rgba(255,255,255,.18); --shadow:0 24px 60px -24px rgba(0,0,0,.7); --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:"Noto Sans Bengali",system-ui,sans-serif;
+    color:var(--ink);line-height:1.6;text-align:center;padding:24px;
+    background:radial-gradient(1200px 620px at 12% -8%,rgba(139,92,246,.20),transparent 60%),
+      radial-gradient(1000px 560px at 92% 6%,rgba(34,211,238,.14),transparent 55%),
+      radial-gradient(900px 700px at 50% 118%,rgba(139,92,246,.12),transparent 60%),
+      linear-gradient(180deg,var(--bg),var(--bg-2) 60%,var(--bg));background-attachment:fixed}
+  .card{position:relative;background:rgba(255,255,255,.06);border:1px solid var(--stroke);border-radius:22px;
+    box-shadow:var(--shadow);
+    padding:44px 40px;max-width:520px;width:min(92vw,520px);animation:pop .6s var(--ease) both}
+  @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+  .code{font-size:88px;font-weight:800;letter-spacing:2px;line-height:1;
+    background:linear-gradient(92deg,var(--a1),var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  h1{font-size:22px;margin:8px 0 6px;font-weight:700}
+  p{color:var(--muted);margin:0 0 24px;font-size:15px}
+  .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  a.btn{display:inline-block;padding:12px 22px;border-radius:14px;font-weight:600;font-size:15px;text-decoration:none;
+    transition:transform .25s var(--ease),filter .25s var(--ease)}
+  a.primary{color:#fff;background:linear-gradient(120deg,var(--a1),var(--a2));box-shadow:0 12px 30px -12px rgba(139,92,246,.8)}
+  a.primary:hover{transform:translateY(-2px);filter:brightness(1.08)}
+  a.ghost{color:var(--ink);background:var(--glass);border:1px solid var(--stroke)}
+  a.ghost:hover{transform:translateY(-2px)}
+  .brand{margin-top:26px;font-size:13px;color:var(--muted)}
+  .brand b{color:var(--ink);font-weight:700}
+  html[lang="en"] body{font-family:"Inter","Noto Sans Bengali",system-ui,sans-serif}
+  /* --- ৮-ভাষা ড্রপডাউন (স্বয়ংসম্পূর্ণ) --- */
+  .lang-dd{position:fixed;top:14px;right:14px;z-index:60}
+  .lang-trigger{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;
+    border-radius:999px;font-family:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;white-space:nowrap;
+    background:var(--glass);border:1px solid var(--stroke);backdrop-filter:saturate(150%) blur(14px);
+    -webkit-backdrop-filter:saturate(150%) blur(14px);transition:transform .25s var(--ease),filter .25s var(--ease)}
+  .lang-trigger:hover{transform:translateY(-2px);filter:brightness(1.08)}
+  .lang-trigger .ld-cur{color:var(--ink)}
+  .lang-trigger .ld-caret{font-size:11px;opacity:.6;margin-left:-2px}
+  .lang-menu{position:absolute;top:calc(100% + 10px);right:0;width:236px;max-width:80vw;z-index:90;
+    background:rgba(11,10,22,.92);backdrop-filter:saturate(150%) blur(18px);-webkit-backdrop-filter:saturate(150%) blur(18px);
+    border:1px solid var(--stroke-2);border-radius:16px;box-shadow:var(--shadow);padding:8px;
+    display:flex;flex-direction:column;gap:6px;animation:lmIn .18s var(--ease);text-align:left}
+  .lang-menu[hidden]{display:none}
+  @keyframes lmIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .lm-search input{width:100%;height:34px;padding:0 12px;border-radius:10px;border:1px solid var(--stroke);
+    background:var(--glass);color:var(--ink);font-family:inherit;font-size:13px;outline:none;transition:border-color .18s var(--ease),background .18s var(--ease)}
+  .lm-search input:focus{border-color:var(--a1);background:var(--glass-strong)}
+  .lm-list{list-style:none;margin:0;padding:0;max-height:262px;overflow:auto;display:flex;flex-direction:column;gap:2px}
+  .lm-list li{display:flex;align-items:baseline;gap:8px;padding:8px 10px;border-radius:10px;cursor:pointer;transition:background .16s var(--ease)}
+  .lm-list li:hover,.lm-list li.hi{background:var(--glass-strong);outline:none}
+  .lm-list li .lm-native{font-size:14px;color:var(--ink);font-family:"Noto Sans Bengali","Noto Sans JP","Noto Sans Devanagari","Segoe UI",system-ui,sans-serif}
+  .lm-list li .lm-latin{font-size:11.5px;color:var(--muted)}
+  .lm-list li[aria-selected="true"]{background:linear-gradient(90deg,rgba(139,92,246,.24),rgba(34,211,238,.14))}
+  .lm-list li[aria-selected="true"] .lm-native{color:var(--a2);font-weight:700}
+  .lm-list li .lm-check{margin-left:auto;opacity:0;color:var(--a2);font-size:13px}
+  .lm-list li[aria-selected="true"] .lm-check{opacity:1}
+  .lm-empty{margin:0;padding:10px;text-align:center;font-size:12.5px;color:var(--muted)}
+  .lm-empty[hidden]{display:none}
+  @media (prefers-reduced-motion: reduce){.card{animation:none}a.btn{transition:none}.lang-trigger{transition:none}.lang-trigger:hover{transform:none}.lang-menu{animation:none}}
+  @media (max-width:520px){.lang-menu{width:210px}}
+</style>
+</head>
+<body>
+  <div class="lang-dd">
+    <button class="lang-trigger" id="lang-btn" type="button" title="Change language" aria-label="Change language" aria-haspopup="listbox" aria-expanded="false"><span class="ld-cur" id="lang-cur">English</span><span class="ld-caret" aria-hidden="true">&#9662;</span></button>
+    <div class="lang-menu" id="lang-menu" role="listbox" aria-label="Language" hidden>
+      <div class="lm-search"><input id="lang-search" type="text" placeholder="Search languages…" autocomplete="off" spellcheck="false"></div>
+      <ul class="lm-list" id="lang-list"></ul>
+      <p class="lm-empty" id="lang-empty" hidden>No language matches</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="code" id="nf-code">404</div>
+    <h1 id="nf-h">There is nothing at this address</h1>
+    <p id="nf-p">The page you are looking for has been removed, or it never existed.</p>
+    <div class="btns">
+      <a class="btn primary" id="nf-b1" href="./index.html">Back to home</a>
+      <a class="btn ghost" id="nf-b2" href="./index.html#contact">Contact</a>
+    </div>
+    <div class="brand"><b>DEEPostrophy</b> · ARAFATH</div>
+  </div>
+<script>
+/* ৮-ভাষা ৪০৪ পাতা — স্বয়ংসম্পূর্ণ, একই localStorage কী (deeo.lang), খালি টেবিল হলে চুপচাপ English।
+   মালিক নিজে হাতে es/de/ja/fr/pt/hi ঘর পূরণ করবেন; bn ও en আগে থেকেই পূর্ণ। */
+(function(){
+  var KEY = "deeo.lang";
+  var LIST = [
+    { code:"en", native:"English",   name:"English"  },
+    { code:"bn", native:"বাংলা",       name:"Bangla"   },
+    { code:"es", native:"Español",   name:"Spanish"  },
+    { code:"de", native:"Deutsch",   name:"German"   },
+    { code:"ja", native:"日本語",        name:"Japanese" },
+    { code:"fr", native:"Français",  name:"French"   },
+    { code:"pt", native:"Português", name:"Portuguese" },
+    { code:"hi", native:"हिन्दी",        name:"Hindi"    }
+  ];
+  /* প্রতিটি ভাষার ঘর = এই পাতার UI লেখা; en/bn সম্পূর্ণ, বাকি ছয়টি খালি (মালিক ভরবেন) */
+  var STRINGS = {
+    en: { title:"404 — DEEPostrophy", desc:"Nothing was found at this address. Go back to DEEPostrophy.", code:"404",
+          h:"There is nothing at this address", p:"The page you are looking for has been removed, or it never existed.",
+          b1:"Back to home", b2:"Contact", lbl:"Change language", search:"Search languages…", empty:"No language matches" },
+    bn: { title:"৪০৪ — DEEPostrophy", desc:"এই ঠিকানায় কিছু পাওয়া যায়নি। DEEPostrophy-তে ফিরে যান।", code:"৪০৪",
+          h:"এই ঠিকানায় কিছু নেই", p:"আপনি যে পাতাটি খুঁজছেন তা সরিয়ে ফেলা হয়েছে বা কখনো ছিল না।",
+          b1:"হোমে ফিরুন", b2:"যোগাযোগ করুন", lbl:"ভাষা বদলান", search:"ভাষা খুঁজুন…", empty:"কোনো ভাষা মেলেনি" },
+    es: {}, de: {}, ja: {}, fr: {}, pt: {}, hi: {}
+  };
+  function valueFor(code, key){
+    var tab = STRINGS[code];
+    var v = tab && tab[key];
+    if (v !== undefined && v !== "") return v;
+    return STRINGS.en[key];
+  }
+  function validCode(c){ for(var i=0;i<LIST.length;i++) if(LIST[i].code===c) return true; return false; }
+  function nativeOf(c){ for(var i=0;i<LIST.length;i++) if(LIST[i].code===c) return LIST[i].native; return LIST[0].native; }
+
+  var LANG = "en";
+  try { var sv = localStorage.getItem(KEY); if (validCode(sv)) LANG = sv; } catch (e) {}
+
+  var btn = document.getElementById("lang-btn");
+  var cur = document.getElementById("lang-cur");
+  var menu = document.getElementById("lang-menu");
+  var search = document.getElementById("lang-search");
+  var listUl = document.getElementById("lang-list");
+  var emptyP = document.getElementById("lang-empty");
+  var meta = document.querySelector('meta[name="description"]');
+  function escHtml(s){ return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; }); }
+  function setText(id, val){ var el = document.getElementById(id); if (el) el.textContent = val; }
+
+  function markSelected(){
+    var nodes = listUl.children;
+    for(var i=0;i<nodes.length;i++) nodes[i].setAttribute("aria-selected", nodes[i].getAttribute("data-code")===LANG ? "true" : "false");
+  }
+  function buildMenu(){
+    listUl.innerHTML = LIST.map(function(l){
+      return '<li role="option" data-code="'+l.code+'" tabindex="-1">' +
+             '<span class="lm-native">'+escHtml(l.native)+'</span>' +
+             '<span class="lm-latin">'+escHtml(l.name)+'</span>' +
+             '<span class="lm-check">✓</span></li>';
+    }).join("");
+    markSelected();
+  }
+  function filterLangs(q){
+    q = (q||"").trim().toLowerCase();
+    var shown = 0, nodes = listUl.children;
+    for(var i=0;i<nodes.length;i++){
+      var li = nodes[i], l = LIST[i];
+      var hay = (l.native + " " + l.name + " " + l.code).toLowerCase();
+      var on = !q || hay.indexOf(q) !== -1;
+      li.style.display = on ? "" : "none"; if(on) shown++;
+    }
+    emptyP.hidden = shown > 0;
+  }
+  function apply(){
+    document.documentElement.lang = LANG;
+    document.documentElement.dir = "ltr";
+    document.title = valueFor(LANG, "title");
+    if (meta) meta.setAttribute("content", valueFor(LANG, "desc"));
+    setText("nf-code", valueFor(LANG, "code"));
+    setText("nf-h",    valueFor(LANG, "h"));
+    setText("nf-p",    valueFor(LANG, "p"));
+    setText("nf-b1",   valueFor(LANG, "b1"));
+    setText("nf-b2",   valueFor(LANG, "b2"));
+    var lbl = valueFor(LANG, "lbl");
+    btn.setAttribute("title", lbl); btn.setAttribute("aria-label", lbl);
+    cur.textContent = nativeOf(LANG);
+    search.setAttribute("placeholder", valueFor(LANG, "search"));
+    emptyP.textContent = valueFor(LANG, "empty");
+    markSelected();
+  }
+  function open(){
+    buildMenu();
+    menu.hidden = false; btn.setAttribute("aria-expanded","true");
+    search.value = ""; filterLangs(""); emptyP.hidden = true;
+    setTimeout(function(){ try{ search.focus(); }catch(e){} }, 0);
+  }
+  function close(){
+    if (menu.hidden) return;
+    menu.hidden = true; btn.setAttribute("aria-expanded","false");
+    var nodes = listUl.children;
+    for(var i=0;i<nodes.length;i++) nodes[i].classList.remove("hi");
+  }
+  function toggle(){ menu.hidden ? open() : close(); }
+  function pick(code){
+    LANG = code;
+    try { localStorage.setItem(KEY, LANG); } catch (e) {}
+    apply();
+  }
+
+  btn.addEventListener("click", function(e){ e.stopPropagation(); toggle(); });
+  menu.addEventListener("click", function(e){
+    e.stopPropagation();
+    var li = e.target && e.target.closest ? e.target.closest("li[data-code]") : null;
+    if (!li) return;
+    pick(li.getAttribute("data-code"));
+    close();
+    try { btn.focus(); } catch(_){}
+  });
+  search.addEventListener("input", function(){ filterLangs(search.value); });
+  search.addEventListener("keydown", function(e){
+    var nodes = [].slice.call(listUl.children);
+    var vis = nodes.filter(function(li){ return li.style.display !== "none"; });
+    if (e.key === "ArrowDown" || e.key === "ArrowUp"){
+      e.preventDefault();
+      if (!vis.length) return;
+      var i = -1; for(var k=0;k<vis.length;k++) if (vis[k].classList.contains("hi")) { i = k; break; }
+      i = e.key === "ArrowDown" ? (i+1+vis.length) % vis.length : (i-1+vis.length) % vis.length;
+      nodes.forEach(function(li){ li.classList.remove("hi"); });
+      vis[i].classList.add("hi"); vis[i].focus();
+    } else if (e.key === "Enter"){
+      e.preventDefault();
+      var hi = menu.querySelector("li.hi");
+      var sel = menu.querySelector('li[aria-selected="true"]');
+      var p = hi || sel || vis[0];
+      if (p) { pick(p.getAttribute("data-code")); close(); }
+    }
+  });
+  document.addEventListener("click", function(){ close(); });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape") close(); });
+
+  apply();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<!--
+  DEEPostrophy — পাবলিক সাইট (শুধু দর্শকদের অংশ)।
+  ফাইল ভাঙন: index.html = পাবলিক, admin.html = মালিকের কন্ট্রোল প্যানেল (পাবলিক মেনুতে এর লিংক নেই),
+  shared.js = শেয়ার্ড CSS + Firebase কনফিগ + ডেটা লেয়ার + অনুবাদ + কার্সার + সাউন্ড + অ্যানিমেশন।
+  404.html আলাদা স্ট্যাটিক পেজ; firestore.rules = Firebase Security Rules; assets/cursors/ = কার্সার ছবি।
+  এই পেজে অ্যাডমিন লগইন, মেনু বা কোড নেই। কোনো নমুনা কনটেন্ট নেই — সব লেখা মালিক প্যানেল থেকে আসে।
+  ডিফল্ট ভাষা English; ভাষা বদলালে সেটি deeo.lang-এ মনে থাকে।
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DEEPostrophy</title>
+<meta name="description" content="ARAFATH-এর ব্যক্তিগত পোর্টফোলিও ও অ্যাপ স্টোর — Flutter, Python, React/TypeScript ও Electron।" />
+<meta name="theme-color" content="#07070c" />
+<meta property="og:title" content="DEEPostrophy" />
+<meta property="og:description" content="ARAFATH-এর ব্যক্তিগত পোর্টফোলিও ও অ্যাপ স্টোর।" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://deepostrophy-go.netlify.app/" />
+<link rel="canonical" href="https://deepostrophy-go.netlify.app/" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%238b5cf6'/%3E%3Cstop%20offset='1'%20stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='100'%20height='100'%20rx='22'%20fill='%2307070c'/%3E%3Crect%20x='14'%20y='14'%20width='72'%20height='72'%20rx='16'%20fill='url(%23g)'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="shared.js"></script>
+<style>
+  /* ফুটারের লিংকের ওপর ভাসমান হেলপার যেন না পড়ে — নিচে জায়গা রাখা */
+  footer{padding-bottom:96px}
+</style>
+</head>
+<body>
+
+
+<div class="boot" id="boot"><div class="ring"></div></div>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <div class="brand" data-goto="home"><span class="dot"></span><span class="name en" id="brand-name" data-i18n-keep>DEEPostrophy</span></div>
+    <nav class="nav-links" id="navlinks">
+      <a href="#home" data-link>হোম</a>
+      <a href="#stores" data-link>স্টোর</a>
+      <a href="#contact" data-link>যোগাযোগ</a>
+    </nav>
+    <div class="nav-tools">
+      <div class="lang-dd">
+        <button class="nav-tool" id="lang-btn" type="button" data-i18n-keep title="ভাষা বদলান" aria-label="ভাষা বদলান"><span class="ld-cur" id="lang-cur">English</span><span class="ld-caret" aria-hidden="true">&#9662;</span></button>
+        <div class="lang-menu" id="lang-menu" role="listbox" aria-label="ভাষা" hidden>
+          <div class="lm-search"><input id="lang-search" type="text" placeholder="ভাষা খুঁজুন…" autocomplete="off" spellcheck="false"></div>
+          <ul class="lm-list" id="lang-list"></ul>
+          <p class="lm-empty" id="lang-empty" hidden>কোনো ভাষা মেলেনি</p>
+        </div>
+      </div>
+      <button class="nav-tool muted" id="sound-btn" type="button" data-i18n-keep aria-pressed="false" title="শব্দ বন্ধ" aria-label="শব্দ বন্ধ">
+        <svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path id="sound-on-wave" d="M16.5 8.8a4.4 4.4 0 0 1 0 6.4"/><path id="sound-off-line" d="m17 9.5 4 5m0-5-4 5"/></svg>
+      </button>
+    </div>
+    <button class="burger" id="burger" aria-label="মেনু">☰</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="page" id="page-home">
+    <div class="reveal">
+      <div class="hero-row">
+        <h1 class="hero en" id="home-title">DEE<span class="grad">Postrophy</span></h1>
+        <img class="hero-anim" src="assets/processor.svg" alt="" aria-hidden="true" width="600" height="500" decoding="async" />
+      </div>
+      <p class="sub" id="home-identity" data-i18n-keep></p>
+      <div class="hero-grid"><a class="btn primary" href="#store-list" data-scroll>স্টোর দেখুন</a></div>
+    </div>
+
+    <div id="feat-tags-wrap" class="drift-wrap reveal" style="margin:22px 0 2px;display:none"><div class="drift-track" data-drift id="feat-tags"></div></div>
+
+    <div id="featured-block" style="display:none">
+      <div class="section-head reveal"><div><h2>ফিচারড আইটেম</h2><p>স্টোরগুলোর বাছাই করা কাজ।</p></div></div>
+      <div class="grid" id="featured-grid"></div>
+    </div>
+
+    <div class="section-head reveal" id="store-list"><div><h2>স্টোর</h2><p>প্রতিটি স্টোরে নিজস্ব ধরনের আইটেম সাজানো থাকে।</p></div></div>
+    <div class="grid stores" id="stores-grid"></div>
+    <div class="empty reveal" id="stores-empty" style="display:none">
+      <b>এখনো কোনো স্টোর যোগ করা হয়নি।</b>
+      কন্ট্রোল প্যানেল থেকে আপনার প্রথম স্টোর তৈরি করুন — তারপর ভেতরে আইটেম বসান।
+    </div>
+  </section>
+
+  <section class="page" id="page-store">
+    <a class="back" href="#home" data-link>← হোমে ফিরুন</a>
+    <div class="reveal" id="store-head"></div>
+    <div id="store-tags-wrap" class="drift-wrap" style="margin:8px 0 4px;display:none"><div class="drift-track" data-drift id="store-tags"></div></div>
+    <div class="toolbar reveal" style="margin-top:18px"><label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="search" type="text" placeholder="নাম, বিবরণ বা ট্যাগ খুঁজুন…"/></label></div>
+    <div class="reveal" style="margin:4px 0 8px"><div class="eyebrow">ধরন</div></div>
+    <div class="filters" id="cat-filters"></div>
+    <div class="section-head reveal" style="margin:24px 0 16px"><h2 id="store-count" style="font-size:20px">আইটেম</h2></div>
+    <div class="grid" id="items-grid"></div>
+    <div class="empty reveal" id="items-empty" style="display:none"><b>এই স্টোরে এখনো কিছু যোগ করা হয়নি।</b>কন্ট্রোল প্যানেল থেকে আইটেম যোগ করুন।</div>
+  </section>
+
+  <section class="page" id="page-item"></section>
+
+  <section class="page" id="page-about">
+    <div class="reveal"><span class="eyebrow">পরিচয়</span><h2 style="font-size:clamp(30px,6vw,50px);margin:8px 0 0;font-weight:800" data-i18n-keep class="en">About DEEPostrophy</h2></div>
+    <div class="panel reveal" id="about-body" style="margin-top:22px"></div>
+  </section>
+
+  <section class="page" id="page-contact">
+    <div class="reveal"><span class="eyebrow">সংযোগ</span><h2 style="font-size:clamp(30px,6vw,50px);margin:8px 0 0;font-weight:800">যোগাযোগ</h2><p class="sub">কোনো প্রজেক্ট, সহযোগিতা বা প্রশ্ন থাকলে লিখুন।</p></div>
+    <div class="contact-grid">
+      <form class="panel reveal" id="contact-form">
+        <div class="field"><label>নাম</label><input id="c-name" required placeholder="আপনার নাম"/></div>
+        <div class="field"><label>ইমেইল</label><input id="c-email" required type="email" placeholder="you@example.com"/></div>
+        <div class="field"><label>মেসেজ</label><textarea id="c-msg" required placeholder="কী জানাতে চান…"></textarea></div>
+        <button class="btn primary" type="submit" id="c-send">পাঠান</button>
+        <p class="note" id="contact-msg" style="margin-top:12px;display:none"></p>
+      </form>
+      <div class="panel reveal" id="contact-links"></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-404">
+    <div class="empty" style="text-align:center;padding:60px 24px"><b id="nf-code" style="font-size:40px" data-i18n-keep>৪০৪</b>এই ঠিকানায় কিছু নেই।<div style="margin-top:16px"><a href="#home" class="btn primary" data-link>হোমে ফিরুন</a></div></div>
+  </section>
+
+</main>
+
+<div class="helper-fab" id="helper-fab" title="সাহায্য" aria-label="সাহায্য">?</div>
+<div class="helper-panel" id="helper-panel">
+  <div class="hh"><h4>সাহায্য ও প্রশ্নোত্তর</h4><button class="mini" id="helper-x" type="button">✕</button></div>
+  <div class="hb">
+    <div class="search" style="margin-bottom:12px"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="faq-search" placeholder="প্রশ্ন খুঁজুন…"/></div>
+    <div id="faq-list"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap foot">
+    <div class="en" data-i18n-keep>© 2026 DEEPostrophy · ARAFATH</div>
+    <div style="display:flex;gap:16px"><a href="#home" data-link>হোম</a><a href="#about" class="en" data-i18n-keep>About DEEPostrophy</a><a href="#contact" data-link>যোগাযোগ</a></div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   index.html — পাবলিক রেন্ডার + রুটিং। বাকি সব shared.js-এ।
+   ========================================================= */
+const PAGES = ["home", "store", "item", "about", "contact", "404"];
+
+/* ---- হোম ---- */
+function renderHome(){
+  const s=S.settings; $("home-identity").textContent=s.identity||""; $("home-identity").style.display=s.identity?"":"none";
+  const stores=pubStores();
+  $("stores-grid").innerHTML = stores.map((st,i)=>{ const k=KINDS[st.kind]||KINDS.custom; return `<article class="card store-card reveal" style="--i:${i%8}">
+    <div class="sicon" data-i18n-keep style="background:linear-gradient(120deg,${k.c[0]},${k.c[1]})">${esc(st.icon||k.icon)}</div>
+    <span class="skind">${esc(t(k.label))}</span><h3 data-i18n-keep>${esc(st.name)}</h3><p class="sdesc" data-i18n-keep>${esc(st.description||"")}</p>
+    <div class="card-actions" style="width:100%;justify-content:space-between;align-items:center"><span class="scount">${tr("{n}টি আইটেম",{n:countItems(st.id)})}</span><a class="btn sm primary" href="#store/${st.id}" data-link>খুলুন</a></div></article>`; }).join("");
+  const has=stores.length>0; $("stores-grid").style.display=has?"":"none"; $("stores-empty").style.display=has?"none":""; $("store-list").style.display=has?"":"none";
+  const feat=featItems(); $("featured-block").style.display=feat.length?"":"none"; $("featured-grid").innerHTML=feat.map((it,i)=>itemCardHtml(it,i)).join("");
+  const tags=[...new Set(feat.flatMap(it=>it.tags||[]))]; const wrap=$("feat-tags-wrap"), track=$("feat-tags");
+  if(tags.length){ wrap.style.display=""; const row=tags.map(x=>`<span class="chip en" data-i18n-keep>${esc(x)}</span>`).join(""); track.innerHTML=row+row; ensureDrift(track); } else wrap.style.display="none";
+}
+
+/* ---- স্টোর ---- */
+const filter={q:"",cat:new Set()};
+function renderStore(id){
+  const st=storeById(id); if(!st){ showPage("home"); return; }
+  const k=KINDS[st.kind]||KINDS.custom; const si=$("search"); if(si) si.value=""; filter.q=""; filter.cat=new Set();
+  $("store-head").innerHTML=`<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div style="width:60px;height:60px;border-radius:18px;display:grid;place-items:center;font-size:30px;background:linear-gradient(120deg,${k.c[0]},${k.c[1]});border:1px solid var(--stroke-2)" data-i18n-keep>${esc(st.icon||k.icon)}</div><div><span class="eyebrow">${tr("{label} স্টোর",{label:t(k.label)})}</span><h2 style="margin:6px 0 0;font-size:clamp(26px,5vw,42px);font-weight:800" data-i18n-keep>${esc(st.name)}</h2></div></div><p class="sub" style="margin-top:14px" data-i18n-keep>${esc(st.description||"")}</p>`;
+  const all=pubItemsOf(id); const cats=[...new Set(all.map(i=>i.category).filter(Boolean))];
+  $("cat-filters").innerHTML=cats.map(c=>`<button class="filter" data-cat="${esc(c)}">${esc(t(c))}</button>`).join("")||`<span class="note">কোনো ধরন নেই।</span>`;
+  const tags=[...new Set(all.flatMap(i=>i.tags||[]))]; const tw=$("store-tags-wrap"), tt=$("store-tags");
+  if(tags.length){ tw.style.display=""; const row=tags.map(x=>`<span class="chip en" data-i18n-keep>${esc(x)}</span>`).join(""); tt.innerHTML=row+row; ensureDrift(tt); } else tw.style.display="none";
+  drawItems(id);
+}
+function drawItems(sid){
+  let list=pubItemsOf(sid);
+  if(filter.cat.size) list=list.filter(i=>filter.cat.has(i.category));
+  if(filter.q){ const q=filter.q.toLowerCase(); list=list.filter(i=>((i.name+" "+(i.tagline||"")+" "+(i.description||"")+" "+(i.tags||[]).join(" ")).toLowerCase().includes(q))); }
+  $("items-grid").innerHTML=list.map((it,i)=>itemCardHtml(it,i)).join("");
+  $("store-count").textContent=tr("আইটেম · {n}টি",{n:list.length});
+  const empty=!list.length; $("items-empty").style.display=empty?"":"none"; $("items-grid").style.display=empty?"none":"";
+}
+document.addEventListener("input",e=>{ if(e.target.id==="search"){ filter.q=e.target.value; const h=location.hash; if(h.startsWith("#store/")) drawItems(h.slice(7)); } });
+document.addEventListener("click",e=>{ const c=e.target.closest("#cat-filters .filter[data-cat]"); if(c){ const v=c.dataset.cat; filter.cat.has(v)?filter.cat.delete(v):filter.cat.add(v); c.classList.toggle("on"); const h=location.hash; if(h.startsWith("#store/")) drawItems(h.slice(7)); } });
+
+/* ---- বিস্তারিত ---- */
+function renderItem(id){
+  const it=itemById(id); const el=$("page-item");
+  if(!it||!it.published){ el.innerHTML='<div class="empty"><b>আইটেমটি পাওয়া যায়নি বা প্রকাশিত নয়।</b><a href="#home" class="btn sm primary" data-link>হোমে ফিরুন</a></div>'; return; }
+  const st=storeById(it.storeId); const L=it.links||{};
+  const img=it.coverImage&&isValidUrl(it.coverImage), grad=it.coverColor||(st?(KINDS[st.kind]||KINDS.custom):null);
+  const bgCss = img?"": (typeof grad==="string"?grad:`linear-gradient(120deg,${grad?grad.c[0]:"#6d28d9"},${grad?grad.c[1]:"#22d3ee"})`);
+  const overlay=reduce?"":`<canvas class="mosaic" data-grad="${img?"":esc(bgCss)}" data-img="${img?esc(it.coverImage):""}"></canvas>`;
+  const coverStyle = img?`background:center/cover no-repeat url('${esc(it.coverImage)}')`:`background:${esc(bgCss)}`;
+  let extraRows="";
+  if(it.category==="বইয়ের কপি"&&(it.author||it.year)){ extraRows+=`<div class="row"><b>লেখক</b><span data-i18n-keep>${esc(it.author||"—")}</span></div><div class="row"><b>বছর</b><span data-i18n-keep>${esc(it.year||"—")}</span></div>`; }
+  el.innerHTML=`<a class="back" href="#store/${esc(it.storeId)}" data-link>← স্টোরে ফিরুন</a>
+    <div class="detail-hero reveal"><div class="detail-cover" style="position:relative;${coverStyle}">${overlay}<div class="title" style="width:100%"><span class="chip" style="background:rgba(0,0,0,.32);color:#fff;border-color:rgba(255,255,255,.25)">${esc(t(it.category||"আইটেম"))}</span><h2 data-i18n-keep>${esc(it.name)}</h2><p data-i18n-keep>${esc(it.tagline||"")}</p></div></div></div>
+    <div class="detail-body">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <div class="panel reveal"><h3>বিবরণ</h3><p class="sub" style="margin:0" data-i18n-keep>${esc(it.description||"")}</p>${it.tags&&it.tags.length?`<div class="langs" style="margin-top:16px">${tagsHtml(it.tags)}</div>`:""}</div>
+        ${it.category==="পাইথন এক্সটেনশন"&&it.installSteps?`<div class="panel reveal"><h3>ইনস্টল নির্দেশ</h3><div class="readme" data-i18n-keep>${esc(it.installSteps)}</div></div>`:""}
+        ${it.readme?`<div class="panel reveal"><h3>README</h3><div class="readme en" data-i18n-keep>${esc(it.readme)}</div></div>`:""}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <div class="panel reveal"><h3>লিংক ও ডাউনলোড</h3><div class="card-actions" style="flex-direction:column;align-items:stretch">
+          ${isValidUrl(L.source)?`<a class="btn ghost full en" href="${esc(L.source)}" target="_blank" rel="noopener">সোর্স কোড</a>`:""}
+          ${isValidUrl(L.download)?`<a class="btn primary full" href="${esc(L.download)}" target="_blank" rel="noopener">ডাউনলোড</a>`:""}
+          ${!isValidUrl(L.source)&&!isValidUrl(L.download)?`<p class="note">এই আইটেমের কোনো লিংক যোগ করা হয়নি।</p>`:""}
+        </div></div>
+        <div class="panel reveal"><h3>তথ্য</h3><div class="kv"><div class="row"><b>স্টোর</b><span data-i18n-keep>${esc(st?st.name:"—")}</span></div><div class="row"><b>ধরন</b><span>${esc(t(it.category||"—"))}</span></div>${extraRows}</div></div>
+      </div></div>`;
+}
+
+/* ---- about / contact ---- */
+/* ---- About DEEPostrophy ---- বিভাগের লেখা শুধু মালিক প্যানেলের সাইট সেটিংস থেকে আসে ---- */
+function renderAbout(){ const s=S.settings; $("about-body").innerHTML = s.about&&s.about.trim()?`<div class="prose" data-i18n-keep>${esc(s.about)}</div>`:`<div class="empty" style="border:none;padding:0;background:none"><b>এই বিভাগে এখনো লেখা যোগ করা হয়নি।</b></div>`; }
+function renderContact(){
+  const s=S.settings, box=$("contact-links"), rows=[];
+  if((s.email||"").trim()){ const url=/^mailto:/i.test(s.email)?s.email.trim():("mailto:"+s.email.trim()); rows.push({ic:"@",label:"ইমেইল",url}); }
+  (s.social||[]).forEach(x=>{ if(x&&x.url&&isValidUrl(x.url)) rows.push({ic:(x.label||"🔗").slice(0,2),label:x.label||x.url,url:x.url}); });
+  box.innerHTML = `<h3>সরাসরি লিংক</h3>` + (rows.length?`<div class="social">`+rows.map(r=>`<a href="${esc(r.url)}" target="_blank" rel="noopener"><span class="ic" data-i18n-keep>${esc(r.ic)}</span><div style="min-width:0"><div style="font-size:15px;overflow:hidden;text-overflow:ellipsis" data-i18n-keep>${esc(t(r.label))}</div><div class="note en">${esc(r.url)}</div></div></a>`).join("")+`</div>`:`<div class="empty" style="border:none;padding:0;background:none"><b>যোগাযোগের লিংক যোগ করা হয়নি।</b>কন্ট্রোল প্যানেল → সাইট সেটিংস থেকে ইমেইল ও সোশ্যাল লিংক দিন।</div>`);
+}
+
+/* ---- রুটিং ---- */
+async function route(){
+  const raw = location.hash.replace("#", "") || "home";
+  const [base, arg] = raw.split("/");
+  if (base === "home" || base === "stores") { renderHome(); showPage("home"); if (base === "stores") toStoreList(); }
+  else if (base === "store" && arg) { renderStore(arg); showPage("store"); }
+  else if (base === "item" && arg) { renderItem(arg); showPage("item"); }
+  else if (base === "about") { renderAbout(); showPage("about"); }
+  else if (base === "contact") { renderContact(); showPage("contact"); }
+  else { const nc = $("nf-code"); if (nc) nc.textContent = LANG === "en" ? "404" : "৪০৪"; showPage("404"); }
+  $("navlinks").classList.remove("open");
+  setActiveNav("#" + base);
+  refreshBrand();
+  if (base !== "stores") scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  observeReveals();
+}
+/* নেভের "স্টোর" আইটেম হোমের স্টোর-তালিকায় গিয়ে থামে */
+function toStoreList(){ const el = $("store-list"); if (!el) return; setTimeout(() => el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }), 60); }
+
+/* ---- যোগাযোগ ফর্ম ---- */
+$("contact-form").addEventListener("submit", async e=>{ e.preventDefault(); const m=$("contact-msg");
+  const fail=x=>{ m.style.color="#ff9a9a"; m.textContent=x; m.style.display="block"; setTimeout(()=>m.style.display="none",5000); };
+  const name=$("c-name").value.trim(), email=$("c-email").value.trim(), body=$("c-msg").value.trim();
+  if(name.length>100) return fail(t("আপনার নাম সর্বোচ্চ ১০০ অক্ষরের হতে হবে।"));
+  if(!email) return fail(t("ইমেইল দিন।"));
+  if(email.length>100) return fail(t("ইমেইল সর্বোচ্চ ১০০ অক্ষরের হতে হবে।"));
+  if(!email.includes("@")) return fail(t("সঠিক ইমেইল ঠিকানা দিন (@ সহ)।"));
+  if(!body) return fail(t("মেসেজ লিখুন।"));
+  if(body.length>2000) return fail(t("মেসেজ সর্বোচ্চ ২০০০ অক্ষরের হতে পারে।"));
+  const rec={ id:uid(), name, email, body, ts: MODE==="fs" ? FB.api.serverTimestamp() : Date.now() };
+  try{ await DB.addMessage(rec); $("c-name").value=""; $("c-email").value=""; $("c-msg").value=""; m.style.color="var(--a2)"; m.textContent=t("ধন্যবাদ! মেসেজটি পাঠানো হয়েছে।"); m.style.display="block"; setTimeout(()=>m.style.display="none",4000); }
+  catch(ex){ fail(tr("পাঠানো যায়নি: {msg}",{msg:ex.message||ex})); } });
+
+/* ---- বুট ---- */
+async function boot(){
+  await bootShared();
+  await route();
+  initDrift();
+  applyI18n(document.body);
+  updateLangBtn(); updateSoundBtn();
+  $("boot").classList.add("hide");
+}
+boot();
+</script>
+</body>
+</html>
